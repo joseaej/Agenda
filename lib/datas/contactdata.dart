@@ -50,8 +50,9 @@ class Contact {
     if (surname != null) result.add('Surname: $surname');
     if (email != null) result.add('Email: $email');
     if (phone != null) result.add('Phone: $phone');
-    if (birthdate != null)
+    if (birthdate != null) {
       result.add('Birthdate: ${birthdate!.toIso8601String()}');
+    }
     result.add('Creation: ${creation.toIso8601String()}');
     result.add('Modification: ${modification.toIso8601String()}');
     result.add('Is Favorite: $isFavorite');
@@ -119,35 +120,35 @@ class Contact {
     Icon iconolabel;
     switch (labels[0]) {
       case "Amistad":
-        iconolabel = Icon(
+        iconolabel = const Icon(
           Icons.person,
           color: Colors.white,
           size: 120,
         );
         break;
       case "Trabajo":
-        iconolabel = Icon(
+        iconolabel = const Icon(
           Icons.work,
           color: Colors.white,
           size: 120,
         );
         break;
       case "casa":
-        iconolabel = Icon(
+        iconolabel = const Icon(
           Icons.house,
           color: Colors.white,
           size: 120,
         );
         break;
       case "Gym":
-        iconolabel = Icon(
+        iconolabel = const Icon(
           Icons.sports_gymnastics,
           color: Colors.white,
           size: 120,
         );
         break;
       default:
-        iconolabel = Icon(
+        iconolabel = const Icon(
           Icons.question_mark,
           color: Colors.white,
           size: 120,

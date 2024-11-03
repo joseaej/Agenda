@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
             seedColor: const Color.fromARGB(235, 33, 31, 31)),
         useMaterial3: true,
       ),
-      home: ContactPage()
+      home: const ContactPage()
       )
     );
   }
