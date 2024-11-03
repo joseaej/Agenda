@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:agenda/pages/editPage.dart';
 import 'package:intl/intl.dart';
 import 'package:agenda/datas/contactdata.dart';
 import 'package:flutter/material.dart';
@@ -217,8 +218,6 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
               TextFormField(
                 controller: labelController,
                 decoration: InputDecoration(
-                    labelText: "Etiquetas",
-                    hintText: "Separadas por comas",
                     hintStyle: TextStyle(color: Colors.white),
                     labelStyle: TextStyle(color: Colors.white)),
                 style: TextStyle(color: Colors.white),
@@ -238,53 +237,18 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
                   contact.labels = updatedLabels;
                   setState(() {
-                    switch (contact.labels[0]) {
-                      case "Amistad":
-                        iconolabel = Icon(
-                          Icons.person,
-                          color: Colors.white,
-                          size: 120,
-                        );
-                        break;
-                      case "Trabajo":
-                        iconolabel = Icon(
-                          Icons.work,
-                          color: Colors.white,
-                          size: 120,
-                        );
-                        break;
-                      case "casa":
-                        iconolabel = Icon(
-                          Icons.house,
-                          color: Colors.white,
-                          size: 120,
-                        );
-                        break;
-                      case "Gym":
-                        iconolabel = Icon(
-                          Icons.sports_gymnastics,
-                          color: Colors.white,
-                          size: 120,
-                        );
-                        break;
-                      default:
-                        iconolabel = Icon(
-                          Icons.question_mark,
-                          color: Colors.white,
-                          size: 120,
-                        );
-                    }
+
                   });
                   print("Etiquetas actualizadas: ${contact.labels}");
 
                   Navigator.pop(context);
                 },
-                child: Text("Aplicar"),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
                   backgroundColor: Color.fromARGB(235, 33, 31, 31),
                   foregroundColor: Colors.white,
                 ),
+                child: Text("Aplicar"),
               ),
             ],
           ),
@@ -301,5 +265,9 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     );
   }
 
-  void onEditIcon() {}
+  void onEditIcon() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => EditPage(),
+    ));
+  }
 }

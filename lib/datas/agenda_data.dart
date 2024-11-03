@@ -1,7 +1,9 @@
 
+import 'package:flutter/material.dart';
+
 import 'contactdata.dart';
 
-class AgendaData {
+class AgendaData extends ChangeNotifier{
   List<Contact> contacts;
 
   AgendaData({List<Contact>? contacts}) : contacts = contacts ?? [];

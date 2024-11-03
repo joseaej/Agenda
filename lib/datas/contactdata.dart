@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Contact {
   final int id;
   String? name;
@@ -31,9 +33,8 @@ class Contact {
       surname: json['surname'],
       email: json['email'],
       phone: json['phone'],
-      birthdate: json['birthdate'] != null
-          ? DateTime.parse(json['birthdate'])
-          : null,
+      birthdate:
+          json['birthdate'] != null ? DateTime.parse(json['birthdate']) : null,
       creation: DateTime.parse(json['creation']),
       modification: DateTime.parse(json['modification']),
       isFavorite: json['isFavorite'] ?? false,
@@ -49,7 +50,8 @@ class Contact {
     if (surname != null) result.add('Surname: $surname');
     if (email != null) result.add('Email: $email');
     if (phone != null) result.add('Phone: $phone');
-    if (birthdate != null) result.add('Birthdate: ${birthdate!.toIso8601String()}');
+    if (birthdate != null)
+      result.add('Birthdate: ${birthdate!.toIso8601String()}');
     result.add('Creation: ${creation.toIso8601String()}');
     result.add('Modification: ${modification.toIso8601String()}');
     result.add('Is Favorite: $isFavorite');
@@ -97,7 +99,7 @@ class Contact {
     if (email != null) data['email'] = email;
     if (phone != null) data['phone'] = phone;
     if (birthdate != null) data['birthdate'] = birthdate!.toIso8601String();
-    
+
     return data;
   }
 
@@ -111,5 +113,46 @@ class Contact {
     modification = DateTime.now();
     isFavorite = other.isFavorite;
     labels = List<String>.from(other.labels);
+  }
+
+  Icon changeIcon() {
+    Icon iconolabel;
+    switch (labels[0]) {
+      case "Amistad":
+        iconolabel = Icon(
+          Icons.person,
+          color: Colors.white,
+          size: 120,
+        );
+        break;
+      case "Trabajo":
+        iconolabel = Icon(
+          Icons.work,
+          color: Colors.white,
+          size: 120,
+        );
+        break;
+      case "casa":
+        iconolabel = Icon(
+          Icons.house,
+          color: Colors.white,
+          size: 120,
+        );
+        break;
+      case "Gym":
+        iconolabel = Icon(
+          Icons.sports_gymnastics,
+          color: Colors.white,
+          size: 120,
+        );
+        break;
+      default:
+        iconolabel = Icon(
+          Icons.question_mark,
+          color: Colors.white,
+          size: 120,
+        );
+    }
+    return iconolabel;
   }
 }
