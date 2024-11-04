@@ -229,15 +229,52 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
                   List<String> updatedLabels = inputText
                       .split(",")
+                      .where((label) => label.isNotEmpty)
                       .map((label) =>
                           label[0].toUpperCase() + label.substring(1))
-                      .where((label) => label.isNotEmpty)
                       .map((label) => label.trim())
                       .toList();
 
                   contact.labels = updatedLabels;
                   setState(() {
-
+                    switch ((contact.labels.isEmpty)
+                        ? "Desconocido"
+                        : contact.labels[0]) {
+                      case "Amistad":
+                        iconolabel = Icon(
+                          Icons.person,
+                          color: Colors.white,
+                          size: 120,
+                        );
+                        break;
+                      case "Trabajo":
+                        iconolabel = Icon(
+                          Icons.work,
+                          color: Colors.white,
+                          size: 120,
+                        );
+                        break;
+                      case "casa":
+                        iconolabel = Icon(
+                          Icons.house,
+                          color: Colors.white,
+                          size: 120,
+                        );
+                        break;
+                      case "Gym":
+                        iconolabel = Icon(
+                          Icons.sports_gymnastics,
+                          color: Colors.white,
+                          size: 120,
+                        );
+                        break;
+                      default:
+                        iconolabel = Icon(
+                          Icons.question_mark,
+                          color: Colors.white,
+                          size: 120,
+                        );
+                    }
                   });
                   print("Etiquetas actualizadas: ${contact.labels}");
 
