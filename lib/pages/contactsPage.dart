@@ -123,7 +123,7 @@ class _ContactPageState extends State<ContactPage> {
               ),
               trailing: IconButton(
                 onPressed: onPointsPresed,
-                icon: Icon(Icons.grid_view_rounded, color: Colors.white),
+                icon: Icon(Icons.more_vert, color: Colors.white),
               ),
             );
           },
@@ -141,6 +141,50 @@ class _ContactPageState extends State<ContactPage> {
           itemCount: favoriteContacts.length,
           itemBuilder: (context, index) {
             final contact = favoriteContacts[index];
+            final List<String> updatedLabels = contact.labels
+                .where((label) => label.isNotEmpty)
+                .map((label) => label[0].toUpperCase() + label.substring(1))
+                .map((label) => label.trim())
+                .toList();
+            contact.labels = updatedLabels;
+            switch (
+                (contact.labels.isEmpty) ? "Desconocido" : contact.labels[0]) {
+              case "Amistad":
+                icono = Icon(
+                  Icons.emoji_emotions,
+                  color: Colors.white,
+                );
+                break;
+              case "Trabajo":
+                icono = Icon(
+                  Icons.business,
+                  color: Colors.white,
+                );
+                break;
+              case "Casa":
+                icono = Icon(
+                  Icons.house,
+                  color: Colors.white,
+                );
+                break;
+              case "Familia":
+                icono = Icon(
+                  Icons.family_restroom,
+                  color: Colors.white,
+                );
+                break;
+              case "Gym":
+                icono = Icon(
+                  Icons.fitness_center,
+                  color: Colors.white,
+                );
+                break;
+              default:
+                icono = Icon(
+                  Icons.question_mark,
+                  color: Colors.white,
+                );
+            }
             return ListTile(
               leading: icono,
               title: Row(
@@ -160,9 +204,23 @@ class _ContactPageState extends State<ContactPage> {
                 "${contact.email!},${contact.phone!}",
                 style: TextStyle(color: Colors.white),
               ),
-              trailing: IconButton(
-                onPressed: onPointsPresed,
-                icon: Icon(Icons.grid_view_rounded, color: Colors.white),
+              trailing: PopupMenuButton(
+                color: Color.fromARGB(255, 33, 31, 31),
+                itemBuilder: (context) =>  <PopupMenuEntry>[
+                  PopupMenuItem(
+                    onTap: () => Navigator.of(context).pop(EditPage()),
+                    child: Row(
+                      
+                    children: const [
+                      Padding(padding: EdgeInsets.all(10)),
+                      Icon(Icons.remove_red_eye,color: Colors.white,),
+                      Text("Ver",style: TextStyle(color: Colors.white),)
+                    ],
+                  )),
+                  PopupMenuItem(child: child),
+                  PopupMenuItem(child: child),
+                ],
+                icon: Icon(Icons.more_vert, color: Colors.white),
               ),
             );
           },
