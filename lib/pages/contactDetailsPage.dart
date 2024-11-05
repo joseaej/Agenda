@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:agenda/pages/contactsPage.dart';
 import 'package:agenda/pages/editPage.dart';
 import 'package:intl/intl.dart';
 import 'package:agenda/models/contactdata.dart';
@@ -14,31 +15,47 @@ class ContactDetailsPage extends StatefulWidget {
 }
 
 class _ContactDetailsPageState extends State<ContactDetailsPage> {
-  Icon icono = Icon(Icons.star_outline);
+  Icon icono = Icon(Icons.star_outline, color: Colors.white);
   bool presionar = false;
   Icon iconolabel = Icon(
     Icons.question_mark,
     color: Colors.white,
     size: 120,
   );
-  _ContactDetailsPageState();
+  @override
+  void initState() {
+    super.initState();
+    if (widget.contact.isFavorite) {
+      icono = Icon(
+        Icons.star,
+        color: Colors.white,
+      );
+    } else {
+      icono = Icon(Icons.star_outline, color: Colors.white);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 33, 31, 31),
-        appBar: _appbar,
+        appBar: _appbar(widget.contact),
         body: _body(widget.contact),
       ),
     );
   }
 
-  AppBar get _appbar => AppBar(
+  AppBar _appbar(Contact contact) => AppBar(
         backgroundColor: const Color.fromARGB(235, 33, 31, 31),
+        leading: IconButton(
+            onPressed: () => onBackIcon(),
+            icon: Icon(Icons.arrow_back, color: Colors.white)),
         actions: [
-          IconButton(onPressed: onFavIcon, icon: icono),
-          IconButton(onPressed: onEditIcon, icon: const Icon(Icons.edit)),
+          IconButton(onPressed: () => onFavIcon(contact), icon: icono),
+          IconButton(
+              onPressed: onEditIcon,
+              icon: const Icon(Icons.edit, color: Colors.white)),
         ],
       );
 
@@ -170,16 +187,22 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
           ],
         ),
       );
+  void onBackIcon() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => ContactPage(),
+    ));
+  }
 
-  void onFavIcon() {
+  void onFavIcon(Contact contact) {
     setState(() {
       if (!presionar) {
-        icono = const Icon(Icons.star_outlined);
+        icono = const Icon(Icons.star_outlined, color: Colors.white);
         presionar = true;
       } else {
-        icono = const Icon(Icons.star_outline);
+        icono = const Icon(Icons.star_outline, color: Colors.white);
         presionar = false;
       }
+      contact.isFavorite = presionar;
       print(presionar);
     });
   }
@@ -303,8 +326,10 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   }
 
   void onEditIcon() {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => EditPage(),
-    ));
+    setState(() {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => EditPage(),
+      ));
+    });
   }
 }
