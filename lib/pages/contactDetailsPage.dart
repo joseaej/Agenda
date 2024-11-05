@@ -2,7 +2,7 @@
 
 import 'package:agenda/pages/editPage.dart';
 import 'package:intl/intl.dart';
-import 'package:agenda/datas/contactdata.dart';
+import 'package:agenda/models/contactdata.dart';
 import 'package:flutter/material.dart';
 
 class ContactDetailsPage extends StatefulWidget {

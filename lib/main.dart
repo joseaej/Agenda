@@ -1,6 +1,6 @@
-import 'package:agenda/datas/agenda_data.dart';
+import 'package:agenda/models/agenda_data.dart';
 import 'package:agenda/pages/contactDetailsPage.dart';
-import 'package:agenda/datas/contactdata.dart';
+import 'package:agenda/models/contactdata.dart';
 import 'package:agenda/pages/contactsPage.dart';
 import 'package:agenda/pages/editPage.dart';
 import 'package:flutter/material.dart';

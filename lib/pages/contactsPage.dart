@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:agenda/datas/agenda_data.dart';
-import 'package:agenda/datas/contactdata.dart';
+import 'package:agenda/models/agenda_data.dart';
+import 'package:agenda/models/contactdata.dart';
 import 'package:agenda/pages/editPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +16,9 @@ class ContactPage extends StatefulWidget {
 
 class _ContactPageState extends State<ContactPage> {
   Icon icono = Icon(Icons.battery_unknown_outlined);
+  bool abcshort = true;
+  Icon iconoord = Icon(FontAwesomeIcons.arrowDownAZ);
+  List<String> updatedLabels = [];
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<AgendaData>;
@@ -58,7 +61,7 @@ class _ContactPageState extends State<ContactPage> {
           itemCount: state.contacts.length,
           itemBuilder: (context, index) {
             final contact = state.contacts[index];
-            final List<String> updatedLabels = contact.labels
+            updatedLabels = contact.labels
                 .where((label) => label.isNotEmpty)
                 .map((label) => label[0].toUpperCase() + label.substring(1))
                 .map((label) => label.trim())
@@ -102,30 +105,27 @@ class _ContactPageState extends State<ContactPage> {
                   color: Colors.white,
                 );
             }
+
             return ListTile(
-              leading: icono,
-              title: Row(
-                children: [
-                  Text(
-                    "${contact.name!} ${contact.surname!}",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  if (contact.isFavorite)
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Icon(Icons.star, color: Colors.white, size: 18),
-                    )
-                ],
-              ),
-              subtitle: Text(
-                "${contact.email!}, ${contact.phone!}",
-                style: TextStyle(color: Colors.white),
-              ),
-              trailing: IconButton(
-                onPressed: onPointsPresed,
-                icon: Icon(Icons.more_vert, color: Colors.white),
-              ),
-            );
+                leading: icono,
+                title: Row(
+                  children: [
+                    Text(
+                      "${contact.name!} ${contact.surname!}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    if (contact.isFavorite)
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        child: Icon(Icons.star, color: Colors.white, size: 18),
+                      )
+                  ],
+                ),
+                subtitle: Text(
+                  "${contact.email!}, ${contact.phone!}",
+                  style: TextStyle(color: Colors.white),
+                ),
+                trailing: _popmenu);
           },
         );
       },
@@ -186,43 +186,25 @@ class _ContactPageState extends State<ContactPage> {
                 );
             }
             return ListTile(
-              leading: icono,
-              title: Row(
-                children: [
-                  Text(
-                    "${contact.name!} ${contact.surname!}",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  if (contact.isFavorite)
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Icon(Icons.star, color: Colors.white, size: 18),
-                    )
-                ],
-              ),
-              subtitle: Text(
-                "${contact.email!},${contact.phone!}",
-                style: TextStyle(color: Colors.white),
-              ),
-              trailing: PopupMenuButton(
-                color: Color.fromARGB(255, 33, 31, 31),
-                itemBuilder: (context) =>  <PopupMenuEntry>[
-                  PopupMenuItem(
-                    onTap: () => Navigator.of(context).pop(EditPage()),
-                    child: Row(
-                      
-                    children: const [
-                      Padding(padding: EdgeInsets.all(10)),
-                      Icon(Icons.remove_red_eye,color: Colors.white,),
-                      Text("Ver",style: TextStyle(color: Colors.white),)
-                    ],
-                  )),
-                  PopupMenuItem(child: child),
-                  PopupMenuItem(child: child),
-                ],
-                icon: Icon(Icons.more_vert, color: Colors.white),
-              ),
-            );
+                leading: icono,
+                title: Row(
+                  children: [
+                    Text(
+                      "${contact.name!} ${contact.surname!}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    if (contact.isFavorite)
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        child: Icon(Icons.star, color: Colors.white, size: 18),
+                      )
+                  ],
+                ),
+                subtitle: Text(
+                  "${contact.email!},${contact.phone!}",
+                  style: TextStyle(color: Colors.white),
+                ),
+                trailing: _popmenu);
           },
         );
       },
@@ -251,6 +233,58 @@ class _ContactPageState extends State<ContactPage> {
         ],
       );
 
+  PopupMenuButton get _popmenu => PopupMenuButton(
+        color: Color.fromARGB(255, 33, 31, 31),
+        itemBuilder: (context) => <PopupMenuEntry<dynamic>>[
+          PopupMenuItem(
+              onTap: () =>
+                  Navigator.of(context).push(EditPage() as Route<Object?>),
+              child: Row(
+                children: const [
+                  Padding(padding: EdgeInsets.all(10)),
+                  Icon(
+                    Icons.remove_red_eye,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    "Ver",
+                    style: TextStyle(color: Colors.white),
+                  )
+                ],
+              )),
+          PopupMenuItem(
+              onTap: () => Navigator.of(context).pop(EditPage()),
+              child: Row(
+                children: const [
+                  Padding(padding: EdgeInsets.all(10)),
+                  Icon(
+                    Icons.abc,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    "Editar",
+                    style: TextStyle(color: Colors.white),
+                  )
+                ],
+              )),
+          PopupMenuItem(
+              onTap: () => Navigator.of(context).pop(EditPage()),
+              child: Row(
+                children: const [
+                  Padding(padding: EdgeInsets.all(10)),
+                  Icon(
+                    Icons.abc_sharp,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    "Eliminar",
+                    style: TextStyle(color: Colors.white),
+                  )
+                ],
+              )),
+        ],
+        icon: Icon(Icons.more_vert, color: Colors.white),
+      );
   AppBar get _appBar => AppBar(
         backgroundColor: Color.fromARGB(255, 33, 31, 31),
         title: Text("Agenda", style: TextStyle(color: Colors.white)),
@@ -258,7 +292,7 @@ class _ContactPageState extends State<ContactPage> {
         actions: [
           IconButton(
             onPressed: onShortPresed,
-            icon: Icon(FontAwesomeIcons.arrowDownAZ, color: Colors.white),
+            icon: iconoord,
           ),
           IconButton(
             onPressed: onFilterPresed,
@@ -268,6 +302,23 @@ class _ContactPageState extends State<ContactPage> {
       );
 
   void onPointsPresed() {}
-  void onShortPresed() {}
+  void onShortPresed() {
+    setState(() {
+      if (abcshort) {
+        iconoord = Icon(FontAwesomeIcons.arrowDownAZ);
+        abcshort = false;
+        Provider.of<AgendaData>(context, listen: false)
+            .contacts
+            .sort((a, b) => a.name!.compareTo(b.name!));
+      } else {
+        iconoord = Icon(FontAwesomeIcons.arrowDownZA);
+        abcshort = true;
+        Provider.of<AgendaData>(context, listen: false)
+            .contacts
+            .sort((a, b) => b.name!.compareTo(a.name!));
+      }
+    });
+  }
+
   void onFilterPresed() {}
 }
