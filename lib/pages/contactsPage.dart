@@ -16,160 +16,136 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
-  Icon icono = Icon(Icons.battery_unknown_outlined);
+  late var prov = Provider.of<AgendaData>(context);
+  late var contactprov = Provider.of<Contact>(context);
   bool abcshort = true;
   Icon iconoord = Icon(FontAwesomeIcons.arrowDownAZ);
   List<String> updatedLabels = [];
+
+  Icon getContactIcon(List<String> labels) {
+    final iconMap = {
+      "Amistad": Icons.emoji_emotions,
+      "Trabajo": Icons.business,
+      "Casa": Icons.house,
+      "Familia": Icons.family_restroom,
+      "Gym": Icons.fitness_center,
+    };
+
+    return Icon(
+      iconMap[labels.isEmpty ? "Desconocido" : labels[0]] ??
+          Icons.question_mark,
+      color: Colors.white,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<AgendaData>(builder: (context, state, child) {
-      return SafeArea(
-        child: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            backgroundColor: Color.fromARGB(255, 33, 31, 31),
-            appBar: _appBar,
-            bottomNavigationBar: _tabbar,
-            body: TabBarView(
-              children: [
-                _contactList(),
-                _listFavorite(),
-              ],
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context).pop(EditPage());
-              },
-              backgroundColor: Color.fromARGB(255, 132, 97, 192),
-              child: Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
+    return SafeArea(
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          backgroundColor: Color.fromARGB(255, 33, 31, 31),
+          appBar: _appBar,
+          bottomNavigationBar: _tabbar,
+          body: TabBarView(
+            children: [
+              _contactList(),
+              _listFavorite(),
+            ],
           ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => EditPage()),
+              );
+            },
+            backgroundColor: Color.fromARGB(255, 132, 97, 192),
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
         ),
-      );
-    });
+      ),
+    );
   }
 
   Widget _contactList() {
-    return Consumer<AgendaData>(
-      builder: (context, state, child) {
-        return ListView.builder(
-          itemCount: state.contacts.length,
-          itemBuilder: (context, index) {
-            final contact = state.contacts[index];
+    return ListView.builder(
+      itemCount: prov.contacts.length,
+      itemBuilder: (context, index) {
+        final contact = prov.contacts[index];
 
-            updatedLabels = contact.labels
-                .where((label) => label.isNotEmpty)
-                .map((label) =>
-                    label.trim().replaceFirst(label[0], label[0].toUpperCase()))
-                .toList();
+        updatedLabels = contact.labels
+            .where((label) => label.isNotEmpty)
+            .map((label) =>
+                label.trim().replaceFirst(label[0], label[0].toUpperCase()))
+            .toList();
 
-            final iconMap = {
-              "Amistad": Icons.emoji_emotions,
-              "Trabajo": Icons.business,
-              "Casa": Icons.house,
-              "Familia": Icons.family_restroom,
-              "Gym": Icons.fitness_center,
-            };
-
-            icono = Icon(
-              iconMap[contact.labels.isEmpty
-                      ? "Desconocido"
-                      : contact.labels[0]] ??
-                  Icons.question_mark,
-              color: Colors.white,
-            );
-
-            return ListTile(
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        ContactDetailsPage(contact: contact))),
-                leading: icono,
-                title: Row(
-                  children: [
-                    Text(
-                      "${contact.name!} ${contact.surname!}",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    if (contact.isFavorite)
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: Icon(Icons.star, color: Colors.white, size: 18),
-                      )
-                  ],
-                ),
-                subtitle: Text(
-                  "${contact.email!}, ${contact.phone!}",
+        return ListTile(
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ContactDetailsPage(contact: contact))),
+            leading: getContactIcon(contact.labels),
+            title: Row(
+              children: [
+                Text(
+                  "${contact.name!} ${contact.surname!}",
                   style: TextStyle(color: Colors.white),
                 ),
-                trailing: _popmenu(contact));
-          },
-        );
+                if (contact.isFavorite)
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Icon(Icons.star, color: Colors.white, size: 18),
+                  )
+              ],
+            ),
+            subtitle: Text(
+              "${contact.email!}, ${contact.phone!}",
+              style: TextStyle(color: Colors.white),
+            ),
+            trailing: _popmenu(contact));
       },
     );
   }
 
   Widget _listFavorite() {
-    return Consumer<AgendaData>(
-      builder: (context, state, child) {
-        final favoriteContacts =
-            state.contacts.where((contact) => contact.isFavorite).toList();
-        return ListView.builder(
-          itemCount: favoriteContacts.length,
-          itemBuilder: (context, index) {
-            final contact = favoriteContacts[index];
+    final favoriteContacts =
+        prov.contacts.where((contact) => contact.isFavorite).toList();
+    return ListView.builder(
+      itemCount: favoriteContacts.length,
+      itemBuilder: (context, index) {
+        final contact = favoriteContacts[index];
 
-            updatedLabels = contact.labels
-                .where((label) => label.isNotEmpty)
-                .map((label) =>
-                    label.trim().replaceFirst(label[0], label[0].toUpperCase()))
-                .toList();
+        updatedLabels = contact.labels
+            .where((label) => label.isNotEmpty)
+            .map((label) =>
+                label.trim().replaceFirst(label[0], label[0].toUpperCase()))
+            .toList();
 
-            final iconMap = {
-              "Amistad": Icons.emoji_emotions,
-              "Trabajo": Icons.business,
-              "Casa": Icons.house,
-              "Familia": Icons.family_restroom,
-              "Gym": Icons.fitness_center,
-            };
-
-            final icono = Icon(
-              iconMap[contact.labels.isEmpty
-                      ? "Desconocido"
-                      : contact.labels[0]] ??
-                  Icons.question_mark,
-              color: Colors.white,
-            );
-
-            return ListTile(
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        ContactDetailsPage(contact: contact))),
-                leading: icono,
-                title: Row(
-                  children: [
-                    Text(
-                      "${contact.name!} ${contact.surname!}",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    if (contact.isFavorite)
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: Icon(Icons.star, color: Colors.white, size: 18),
-                      )
-                  ],
-                ),
-                subtitle: Text(
-                  "${contact.email!},${contact.phone!}",
+        return ListTile(
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ContactDetailsPage(contact: contact))),
+            leading: getContactIcon(contact.labels),
+            title: Row(
+              children: [
+                Text(
+                  "${contact.name!} ${contact.surname!}",
                   style: TextStyle(color: Colors.white),
                 ),
-                trailing: _popmenu(contact));
-          },
-        );
+                if (contact.isFavorite)
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Icon(Icons.star, color: Colors.white, size: 18),
+                  )
+              ],
+            ),
+            subtitle: Text(
+              "${contact.email!}, ${contact.phone!}",
+              style: TextStyle(color: Colors.white),
+            ),
+            trailing: _popmenu(contact));
       },
     );
   }
@@ -199,68 +175,53 @@ class _ContactPageState extends State<ContactPage> {
   PopupMenuButton _popmenu(Contact contacto) => PopupMenuButton<int>(
         onSelected: (int result) {
           if (result == 1) {
-            /* Ver detalles (esta es la opción) */
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ContactDetailsPage(contact: contacto),
+            ));
           } else if (result == 2) {
-            /* Editar (la implementaremos en Ejercicios 3.3) */
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => EditPage(),
+            ));
           } else if (result == 3) {
-            /* Borrar (la implementaremos en el ejercicio 7) */
+            prov.eliminar(contacto);
           }
         },
         color: Color.fromARGB(255, 33, 31, 31),
         itemBuilder: (context) => <PopupMenuEntry<int>>[
           PopupMenuItem(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ContactDetailsPage(
-                      contact: contacto,
-                    ),
-                  )),
-              child: Row(
-                children: const [
-                  Padding(padding: EdgeInsets.all(10)),
-                  Icon(
-                    Icons.remove_red_eye,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    "Ver",
-                    style: TextStyle(color: Colors.white),
-                  )
-                ],
-              )),
+            value: 1,
+            child: Row(
+              children: const [
+                Padding(padding: EdgeInsets.all(10)),
+                Icon(Icons.remove_red_eye, color: Colors.white),
+                Text("Ver", style: TextStyle(color: Colors.white)),
+              ],
+            ),
+          ),
           PopupMenuItem(
-              onTap: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => EditPage())),
-              child: Row(
-                children: const [
-                  Padding(padding: EdgeInsets.all(10)),
-                  Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    "Editar",
-                    style: TextStyle(color: Colors.white),
-                  )
-                ],
-              )),
+            value: 2,
+            child: Row(
+              children: const [
+                Padding(padding: EdgeInsets.all(10)),
+                Icon(Icons.edit, color: Colors.white),
+                Text("Editar", style: TextStyle(color: Colors.white)),
+              ],
+            ),
+          ),
           PopupMenuItem(
-              onTap: () => Navigator.of(context).pop(EditPage()),
-              child: Row(
-                children: const [
-                  Padding(padding: EdgeInsets.all(10)),
-                  Icon(
-                    Icons.delete,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    "Eliminar",
-                    style: TextStyle(color: Colors.white),
-                  )
-                ],
-              )),
+            value: 3,
+            child: Row(
+              children: const [
+                Padding(padding: EdgeInsets.all(10)),
+                Icon(Icons.delete, color: Colors.white),
+                Text("Eliminar", style: TextStyle(color: Colors.white)),
+              ],
+            ),
+          ),
         ],
         icon: Icon(Icons.more_vert, color: Colors.white),
       );
+
   AppBar get _appBar => AppBar(
         backgroundColor: Color.fromARGB(255, 33, 31, 31),
         title: Text("Agenda", style: TextStyle(color: Colors.white)),
@@ -277,7 +238,6 @@ class _ContactPageState extends State<ContactPage> {
         ],
       );
 
-  void onPointsPresed() {}
   void onShortPresed() {
     setState(() {
       if (abcshort) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Contact {
+class Contact extends ChangeNotifier{
   final int id;
   String? name;
   String? surname;

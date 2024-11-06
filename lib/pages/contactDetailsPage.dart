@@ -15,24 +15,39 @@ class ContactDetailsPage extends StatefulWidget {
 }
 
 class _ContactDetailsPageState extends State<ContactDetailsPage> {
-  Icon icono = Icon(Icons.star_outline, color: Colors.white);
+  Icon? iconStar;
   bool presionar = false;
-  Icon iconolabel = Icon(
-    Icons.question_mark,
-    color: Colors.white,
-    size: 120,
-  );
+  late Icon iconolabel;
+
   @override
   void initState() {
     super.initState();
     if (widget.contact.isFavorite) {
-      icono = Icon(
+      iconStar = Icon(
         Icons.star,
         color: Colors.white,
       );
     } else {
-      icono = Icon(Icons.star_outline, color: Colors.white);
+      iconStar = Icon(Icons.star_outline, color: Colors.white);
     }
+    iconolabel = getContactIcon(widget.contact.labels);
+  }
+
+  Icon getContactIcon(List<String> labels) {
+    final iconMap = {
+      "Amistad": Icons.emoji_emotions,
+      "Trabajo": Icons.business,
+      "Casa": Icons.house,
+      "Familia": Icons.family_restroom,
+      "Gym": Icons.fitness_center,
+    };
+
+    return Icon(
+      iconMap[labels.isEmpty ? "Desconocido" : labels[0]] ??
+          Icons.question_mark,
+      color: Colors.white,
+      size: 120,
+    );
   }
 
   @override
@@ -52,7 +67,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
             onPressed: () => onBackIcon(),
             icon: Icon(Icons.arrow_back, color: Colors.white)),
         actions: [
-          IconButton(onPressed: () => onFavIcon(contact), icon: icono),
+          IconButton(onPressed: () => onFavIcon(contact), icon: iconStar!),
           IconButton(
               onPressed: onEditIcon,
               icon: const Icon(Icons.edit, color: Colors.white)),
@@ -187,6 +202,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
           ],
         ),
       );
+
   void onBackIcon() {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => ContactPage(),
@@ -196,10 +212,10 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   void onFavIcon(Contact contact) {
     setState(() {
       if (!presionar) {
-        icono = const Icon(Icons.star_outlined, color: Colors.white);
+        iconStar = const Icon(Icons.star_outlined, color: Colors.white);
         presionar = true;
       } else {
-        icono = const Icon(Icons.star_outline, color: Colors.white);
+        iconStar = const Icon(Icons.star_outline, color: Colors.white);
         presionar = false;
       }
       contact.isFavorite = presionar;
@@ -260,44 +276,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
                   contact.labels = updatedLabels;
                   setState(() {
-                    switch ((contact.labels.isEmpty)
-                        ? "Desconocido"
-                        : contact.labels[0]) {
-                      case "Amistad":
-                        iconolabel = Icon(
-                          Icons.person,
-                          color: Colors.white,
-                          size: 120,
-                        );
-                        break;
-                      case "Trabajo":
-                        iconolabel = Icon(
-                          Icons.work,
-                          color: Colors.white,
-                          size: 120,
-                        );
-                        break;
-                      case "casa":
-                        iconolabel = Icon(
-                          Icons.house,
-                          color: Colors.white,
-                          size: 120,
-                        );
-                        break;
-                      case "Gym":
-                        iconolabel = Icon(
-                          Icons.sports_gymnastics,
-                          color: Colors.white,
-                          size: 120,
-                        );
-                        break;
-                      default:
-                        iconolabel = Icon(
-                          Icons.question_mark,
-                          color: Colors.white,
-                          size: 120,
-                        );
-                    }
+                    iconolabel = getContactIcon(contact.labels);
                   });
                   print("Etiquetas actualizadas: ${contact.labels}");
 
