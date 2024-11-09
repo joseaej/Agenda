@@ -1,6 +1,8 @@
 import 'package:agenda/models/agenda_data.dart';
 import 'package:agenda/models/contactdata.dart';
 
+//var agenda = AgendaData();
+
 var agenda = AgendaData(contacts: [
   Contact(
       id: 1,

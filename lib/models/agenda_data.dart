@@ -27,4 +27,13 @@ class AgendaData extends ChangeNotifier {
     contacts.remove(contact);
     notifyListeners();
   }
+
+  void anadir(Contact contact) {
+    contacts.add(contact);
+    notifyListeners();
+  }
+
+  void notificar() {
+    notifyListeners();
+  }
 }

@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:agenda/datas/functions.dart';
+import 'package:agenda/pages/contactFormPage.dart';
 import 'package:agenda/pages/contactsPage.dart';
-import 'package:agenda/pages/editPage.dart';
 import 'package:intl/intl.dart';
 import 'package:agenda/models/contactdata.dart';
 import 'package:flutter/material.dart';
@@ -306,9 +307,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
   void onEditIcon() {
     setState(() {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => EditPage(),
-      ));
+      onEditContact(context, widget.contact);
     });
   }
 }

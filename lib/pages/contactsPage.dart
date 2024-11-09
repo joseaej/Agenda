@@ -1,9 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:agenda/datas/functions.dart';
 import 'package:agenda/models/agenda_data.dart';
 import 'package:agenda/models/contactdata.dart';
 import 'package:agenda/pages/contactDetailsPage.dart';
-import 'package:agenda/pages/editPage.dart';
+import 'package:agenda/pages/contactFormPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -54,17 +55,14 @@ class _ContactPageState extends State<ContactPage> {
             ],
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => EditPage()),
-              );
-            },
-            backgroundColor: Color.fromARGB(255, 132, 97, 192),
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-          ),
+              onPressed: () {
+                onCreateContact(context);
+              },
+              backgroundColor: Color.fromARGB(255, 132, 97, 192),
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              )),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
         ),
@@ -179,9 +177,7 @@ class _ContactPageState extends State<ContactPage> {
               builder: (context) => ContactDetailsPage(contact: contacto),
             ));
           } else if (result == 2) {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => EditPage(),
-            ));
+            onEditContact(context, contacto);
           } else if (result == 3) {
             prov.eliminar(contacto);
           }

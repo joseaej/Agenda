@@ -12,6 +12,19 @@ class Contact extends ChangeNotifier{
   bool isFavorite;
   List<String> labels;
 
+    Contact.vacio({
+    required this.id,
+    this.name,
+    this.surname,
+    this.email,
+    this.phone,
+    this.birthdate,
+    DateTime? creation,
+    DateTime? modification,
+    this.isFavorite = false,
+    this.labels = const [],
+  })  : creation = creation ?? DateTime.now(),
+        modification = modification ?? DateTime.now();
   Contact({
     required this.id,
     this.name,
