@@ -1,29 +1,32 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:agenda/datas/functions.dart';
 import 'package:agenda/pages/contactFormPage.dart';
 import 'package:agenda/pages/contactsPage.dart';
 import 'package:intl/intl.dart';
 import 'package:agenda/models/contactdata.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ContactDetailsPage extends StatefulWidget {
-  final Contact contact;
-  const ContactDetailsPage({super.key, required this.contact});
+  Contact contact;
+  ContactDetailsPage({super.key, required this.contact});
 
   @override
   State<ContactDetailsPage> createState() => _ContactDetailsPageState();
 }
 
 class _ContactDetailsPageState extends State<ContactDetailsPage> {
+  late var contactprov = Provider.of<Contact>(context);
+
   Icon? iconStar;
   bool presionar = false;
   late Icon iconolabel;
-
   @override
   void initState() {
     super.initState();
-    if (widget.contact.isFavorite) {
+    contactprov = widget.contact;
+    contactprov.notificar();
+    if (contactprov.isFavorite) {
       iconStar = Icon(
         Icons.star,
         color: Colors.white,
@@ -31,7 +34,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     } else {
       iconStar = Icon(Icons.star_outline, color: Colors.white);
     }
-    iconolabel = getContactIcon(widget.contact.labels);
+    iconolabel = getContactIcon(contactprov.labels);
   }
 
   Icon getContactIcon(List<String> labels) {
@@ -56,8 +59,8 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 33, 31, 31),
-        appBar: _appbar(widget.contact),
-        body: _body(widget.contact),
+        appBar: _appbar(contactprov),
+        body: _body(contactprov),
       ),
     );
   }
@@ -305,9 +308,17 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     );
   }
 
-  void onEditIcon() {
+  void onEditIcon() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ContactFormPage(
+          contacto: widget.contact,
+        ),
+      ),
+    );
     setState(() {
-      onEditContact(context, widget.contact);
+      widget.contact;
     });
   }
 }

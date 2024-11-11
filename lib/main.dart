@@ -1,6 +1,5 @@
 import 'package:agenda/datas/messages.dart';
-import 'package:agenda/models/contactdata.dart';
-import 'package:agenda/pages/contactFormPage.dart';
+import 'package:agenda/models/contact.provider.dart';
 import 'package:agenda/pages/contactsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +16,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: agenda),
+          ChangeNotifierProvider(create: (_) => ContactProvider()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

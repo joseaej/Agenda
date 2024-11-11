@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Contact extends ChangeNotifier{
+class Contact extends ChangeNotifier {
   final int id;
   String? name;
   String? surname;
@@ -12,7 +12,7 @@ class Contact extends ChangeNotifier{
   bool isFavorite;
   List<String> labels;
 
-    Contact.vacio({
+  Contact.vacio({
     required this.id,
     this.name,
     this.surname,
@@ -168,5 +168,9 @@ class Contact extends ChangeNotifier{
         );
     }
     return iconolabel;
+  }
+
+  void notificar() {
+    notifyListeners();
   }
 }
