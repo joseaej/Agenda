@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:agenda/pages/contactFormPage.dart';
+import 'package:agenda/models/events_hub.dart';
 import 'package:agenda/pages/contactsPage.dart';
 import 'package:intl/intl.dart';
 import 'package:agenda/models/contactdata.dart';
@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ContactDetailsPage extends StatefulWidget {
-  Contact contact;
+  ContactData contact;
   ContactDetailsPage({super.key, required this.contact});
 
   @override
@@ -16,8 +16,8 @@ class ContactDetailsPage extends StatefulWidget {
 }
 
 class _ContactDetailsPageState extends State<ContactDetailsPage> {
-  late var contactprov = Provider.of<Contact>(context);
-
+  late var contactprov = Provider.of<ContactData>(context);
+  var events_hub = EventsHub();
   Icon? iconStar;
   bool presionar = false;
   late Icon iconolabel;
@@ -60,12 +60,14 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 33, 31, 31),
         appBar: _appbar(contactprov),
-        body: _body(contactprov),
+        body: SingleChildScrollView(
+          child: _body(contactprov),
+        ),
       ),
     );
   }
 
-  AppBar _appbar(Contact contact) => AppBar(
+  AppBar _appbar(ContactData contact) => AppBar(
         backgroundColor: const Color.fromARGB(235, 33, 31, 31),
         leading: IconButton(
             onPressed: () => onBackIcon(),
@@ -73,21 +75,23 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
         actions: [
           IconButton(onPressed: () => onFavIcon(contact), icon: iconStar!),
           IconButton(
-              onPressed: onEditIcon,
+              onPressed: () {
+                events_hub.onEditContact(context,contact);
+              },
               icon: const Icon(Icons.edit, color: Colors.white)),
         ],
       );
 
-  Widget _body(Contact contact) => Container(
-        padding: EdgeInsets.all(20),
+  Widget _body(ContactData contact) => Container(
+        padding: EdgeInsets.all(10),
         alignment: Alignment.topCenter,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Container(
                 alignment: Alignment.center,
-                width: 200,
-                height: 200,
+                width: 150,
+                height: 150,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -185,7 +189,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
               color: Colors.white,
             ),
             TextButton(
-              onPressed: () => onLabelsPress(context, contact),
+              onPressed: () => events_hub.onEditLabels(context,contact.labels),
               child: ListTile(
                   subtitleTextStyle: TextStyle(color: Colors.white),
                   title: Text("Etiquetas",
@@ -213,7 +217,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     ));
   }
 
-  void onFavIcon(Contact contact) {
+  void onFavIcon(ContactData contact) {
     setState(() {
       if (!presionar) {
         iconStar = const Icon(Icons.star_outlined, color: Colors.white);
@@ -227,7 +231,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     });
   }
 
-  void onEmailPress(BuildContext context, Contact contact) {
+  void onEmailPress(BuildContext context, ContactData contact) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text("Enviando email a ${contact.email ?? ""}"),
@@ -235,90 +239,11 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     );
   }
 
-  void onLabelsPress(BuildContext context, Contact contact) {
-    String initialLabels = contact.labels.map((label) {
-      return label[0].toUpperCase() + label.substring(1);
-    }).join(", ");
-
-    TextEditingController labelController =
-        TextEditingController(text: initialLabels);
-
-    showModalBottomSheet(
-      backgroundColor: const Color.fromARGB(255, 41, 40, 40),
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-            left: 16,
-            right: 16,
-            top: 20,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: labelController,
-                decoration: InputDecoration(
-                    hintStyle: TextStyle(color: Colors.white),
-                    labelStyle: TextStyle(color: Colors.white)),
-                style: TextStyle(color: Colors.white),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  String inputText = labelController.text;
-
-                  List<String> updatedLabels = inputText
-                      .split(",")
-                      .where((label) => label.isNotEmpty)
-                      .map((label) =>
-                          label[0].toUpperCase() + label.substring(1))
-                      .map((label) => label.trim())
-                      .toList();
-
-                  contact.labels = updatedLabels;
-                  setState(() {
-                    iconolabel = getContactIcon(contact.labels);
-                  });
-                  print("Etiquetas actualizadas: ${contact.labels}");
-
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50),
-                  backgroundColor: Color.fromARGB(235, 33, 31, 31),
-                  foregroundColor: Colors.white,
-                ),
-                child: Text("Aplicar"),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void onPhonePress(BuildContext context, Contact contact) {
+  void onPhonePress(BuildContext context, ContactData contact) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text("Llamando a ${contact.phone ?? ""}"),
       ),
     );
-  }
-
-  void onEditIcon() async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ContactFormPage(
-          contacto: widget.contact,
-        ),
-      ),
-    );
-    setState(() {
-      widget.contact;
-    });
   }
 }

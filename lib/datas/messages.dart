@@ -4,14 +4,14 @@ import 'package:agenda/models/contactdata.dart';
 //var agenda = AgendaData();
 
 var agenda = AgendaData(contacts: [
-  Contact(
+  ContactData(
       id: 1,
       name: "John",
       surname: "Doe",
       email: "john.doe@gmail.com",
       phone: "555-1234",
       birthdate: DateTime(1996, 7, 19)),
-  Contact(
+  ContactData(
       id: 2,
       name: "Jane",
       surname: "Smith",
@@ -20,7 +20,7 @@ var agenda = AgendaData(contacts: [
       birthdate: DateTime(1990, 12, 5),
       isFavorite: true,
       labels: ["Trabajo", "VIP"]),
-  Contact(
+  ContactData(
       id: 3,
       name: "Alice",
       surname: "Johnson",
@@ -28,7 +28,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-8765",
       birthdate: DateTime(1985, 3, 15),
       labels: ["Familia"]),
-  Contact(
+  ContactData(
       id: 4,
       name: "Bob",
       surname: "Williams",
@@ -36,7 +36,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-4321",
       birthdate: DateTime(1982, 8, 23),
       labels: ["Amistad", "Gym"]),
-  Contact(
+  ContactData(
       id: 5,
       name: "Chris",
       surname: "Evans",
@@ -45,7 +45,7 @@ var agenda = AgendaData(contacts: [
       birthdate: DateTime(1992, 2, 20),
       isFavorite: true,
       labels: ["Work"]),
-  Contact(
+  ContactData(
       id: 6,
       name: "Emma",
       surname: "Watson",
@@ -53,7 +53,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-6789",
       birthdate: DateTime(1991, 4, 15),
       labels: ["VIP", "Trabajo"]),
-  Contact(
+  ContactData(
       id: 7,
       name: "George",
       surname: "Brown",
@@ -61,7 +61,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-2345",
       birthdate: DateTime(1987, 5, 10),
       labels: ["Amistad"]),
-  Contact(
+  ContactData(
       id: 8,
       name: "Laura",
       surname: "Taylor",
@@ -70,7 +70,7 @@ var agenda = AgendaData(contacts: [
       birthdate: DateTime(1995, 10, 30),
       isFavorite: true,
       labels: ["Familia", "VIP"]),
-  Contact(
+  ContactData(
       id: 9,
       name: "Michael",
       surname: "Clark",
@@ -78,7 +78,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-4567",
       birthdate: DateTime(1983, 11, 22),
       labels: ["Familia", "Gym"]),
-  Contact(
+  ContactData(
       id: 10,
       name: "Olivia",
       surname: "Martinez",
@@ -87,7 +87,7 @@ var agenda = AgendaData(contacts: [
       birthdate: DateTime(1997, 1, 18),
       isFavorite: true,
       labels: ["Trabajo"]),
-  Contact(
+  ContactData(
       id: 11,
       name: "Daniel",
       surname: "Moore",
@@ -95,7 +95,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-6543",
       birthdate: DateTime(1994, 6, 14),
       labels: ["Familia"]),
-  Contact(
+  ContactData(
       id: 12,
       name: "Sophia",
       surname: "Lee",
@@ -104,7 +104,7 @@ var agenda = AgendaData(contacts: [
       birthdate: DateTime(1993, 8, 22),
       isFavorite: false,
       labels: ["VIP"]),
-  Contact(
+  ContactData(
       id: 13,
       name: "James",
       surname: "Harris",
@@ -112,7 +112,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-2134",
       birthdate: DateTime(1998, 3, 9),
       labels: ["Gym"]),
-  Contact(
+  ContactData(
       id: 14,
       name: "Liam",
       surname: "Clarkson",
@@ -121,7 +121,7 @@ var agenda = AgendaData(contacts: [
       birthdate: DateTime(1992, 9, 25),
       isFavorite: true,
       labels: ["Trabajo", "Familia"]),
-  Contact(
+  ContactData(
       id: 15,
       name: "Mia",
       surname: "Martinez",
@@ -129,7 +129,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-3465",
       birthdate: DateTime(1988, 7, 13),
       labels: ["VIP"]),
-  Contact(
+  ContactData(
       id: 16,
       name: "Elijah",
       surname: "Taylor",
@@ -137,7 +137,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-1765",
       birthdate: DateTime(1990, 11, 30),
       labels: ["Amistad", "Familia"]),
-  Contact(
+  ContactData(
       id: 17,
       name: "Isabella",
       surname: "Allen",
@@ -146,7 +146,7 @@ var agenda = AgendaData(contacts: [
       birthdate: DateTime(1984, 4, 28),
       isFavorite: true,
       labels: ["Familia"]),
-  Contact(
+  ContactData(
       id: 18,
       name: "Aiden",
       surname: "Young",
@@ -154,7 +154,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-9873",
       birthdate: DateTime(1995, 12, 16),
       labels: ["Gym"]),
-  Contact(
+  ContactData(
       id: 19,
       name: "Emily",
       surname: "King",
@@ -162,7 +162,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-3125",
       birthdate: DateTime(1999, 2, 7),
       labels: ["VIP"]),
-  Contact(
+  ContactData(
       id: 20,
       name: "Benjamin",
       surname: "Perez",
@@ -170,7 +170,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-4562",
       birthdate: DateTime(1991, 10, 3),
       labels: ["Trabajo", "Amistad"]),
-  Contact(
+  ContactData(
       id: 21,
       name: "Abigail",
       surname: "Robinson",
@@ -178,7 +178,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-6547",
       birthdate: DateTime(1986, 3, 24),
       isFavorite: false),
-  Contact(
+  ContactData(
       id: 22,
       name: "Lucas",
       surname: "Scott",
@@ -186,7 +186,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-4589",
       birthdate: DateTime(1982, 6, 29),
       labels: ["Amistad"]),
-  Contact(
+  ContactData(
       id: 23,
       name: "Amelia",
       surname: "Campbell",
@@ -194,7 +194,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-7864",
       birthdate: DateTime(1994, 7, 15),
       labels: ["VIP"]),
-  Contact(
+  ContactData(
       id: 24,
       name: "Henry",
       surname: "Turner",
@@ -202,7 +202,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-2943",
       birthdate: DateTime(1990, 8, 20),
       labels: ["Familia", "Trabajo"]),
-  Contact(
+  ContactData(
       id: 25,
       name: "Victoria",
       surname: "Phillips",
@@ -210,7 +210,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-9156",
       birthdate: DateTime(1989, 9, 5),
       labels: ["Amistad"]),
-  Contact(
+  ContactData(
       id: 26,
       name: "Jack",
       surname: "Collins",
@@ -219,7 +219,7 @@ var agenda = AgendaData(contacts: [
       birthdate: DateTime(1998, 1, 30),
       isFavorite: true,
       labels: ["Trabajo"]),
-  Contact(
+  ContactData(
       id: 27,
       name: "Harper",
       surname: "Evans",
@@ -227,7 +227,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-4768",
       birthdate: DateTime(1995, 5, 14),
       labels: ["VIP"]),
-  Contact(
+  ContactData(
       id: 28,
       name: "Alexander",
       surname: "Wright",
@@ -235,7 +235,7 @@ var agenda = AgendaData(contacts: [
       phone: "555-2347",
       birthdate: DateTime(1983, 12, 19),
       labels: ["Amistad", "Familia"]),
-  Contact(
+  ContactData(
       id: 29,
       name: "Grace",
       surname: "Baker",
@@ -244,7 +244,7 @@ var agenda = AgendaData(contacts: [
       birthdate: DateTime(1987, 11, 11),
       isFavorite: false,
       labels: ["Gym"]),
-  Contact(
+  ContactData(
       id: 30,
       name: "Sebastian",
       surname: "Green",

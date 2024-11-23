@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:agenda/datas/functions.dart';
 import 'package:agenda/models/agenda_data.dart';
 import 'package:agenda/models/contactdata.dart';
+import 'package:agenda/models/events_hub.dart';
 import 'package:agenda/pages/contactDetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +17,8 @@ class ContactPage extends StatefulWidget {
 
 class _ContactPageState extends State<ContactPage> {
   late var prov = Provider.of<AgendaData>(context);
-  late var contactprov = Provider.of<Contact>(context);
+  late var contactprov = Provider.of<ContactData>(context);
+  var events_hub = EventsHub();
   bool abcshort = true;
   Icon iconoord = Icon(FontAwesomeIcons.arrowDownAZ);
   List<String> updatedLabels = [];
@@ -55,7 +56,7 @@ class _ContactPageState extends State<ContactPage> {
           ),
           floatingActionButton: FloatingActionButton(
               onPressed: () {
-                onCreateContact(context);
+                events_hub.onCreateContact(context);
               },
               backgroundColor: Color.fromARGB(255, 132, 97, 192),
               child: Icon(
@@ -169,16 +170,16 @@ class _ContactPageState extends State<ContactPage> {
         ],
       );
 
-  PopupMenuButton _popmenu(Contact contacto) => PopupMenuButton<int>(
+  PopupMenuButton _popmenu(ContactData contacto) => PopupMenuButton<int>(
         onSelected: (int result) {
           if (result == 1) {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => ContactDetailsPage(contact: contacto),
             ));
           } else if (result == 2) {
-            onEditContact(context, contacto);
+            events_hub.onEditContact(context, contacto);
           } else if (result == 3) {
-            prov.eliminar(contacto);
+            events_hub.onDeleteContact(context, contacto);
           }
         },
         color: Color.fromARGB(255, 33, 31, 31),
@@ -223,7 +224,7 @@ class _ContactPageState extends State<ContactPage> {
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
           IconButton(
-            onPressed: onShortPresed,
+            onPressed: events_hub.onSort(context),
             icon: iconoord,
           ),
           IconButton(

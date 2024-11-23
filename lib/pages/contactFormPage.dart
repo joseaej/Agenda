@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ContactFormPage extends StatefulWidget {
-  Contact contacto;
+  ContactData contacto;
   ContactFormPage({super.key, required this.contacto});
 
   @override

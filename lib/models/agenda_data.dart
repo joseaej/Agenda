@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'contactdata.dart';
 
 class AgendaData extends ChangeNotifier {
-  List<Contact> contacts;
+  List<ContactData> contacts;
 
-  AgendaData({List<Contact>? contacts}) : contacts = contacts ?? [];
+  AgendaData({List<ContactData>? contacts}) : contacts = contacts ?? [];
 
   factory AgendaData.fromJson(Map<String, dynamic> json) {
     var contactsJson = json['contacts'] as List<dynamic>;
 
-    List<Contact> contactList = contactsJson
-        .map((contactJson) => Contact.fromJson(contactJson))
+    List<ContactData> contactList = contactsJson
+        .map((contactJson) => ContactData.fromJson(contactJson))
         .toList();
 
     return AgendaData(contacts: contactList);
@@ -23,12 +23,12 @@ class AgendaData extends ChangeNotifier {
     };
   }
 
-  void eliminar(Contact contact) {
+  void eliminar(ContactData contact) {
     contacts.remove(contact);
     notifyListeners();
   }
 
-  void anadir(Contact contact) {
+  void anadir(ContactData contact) {
     contacts.add(contact);
     notifyListeners();
   }
