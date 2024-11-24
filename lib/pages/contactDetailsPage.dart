@@ -189,7 +189,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
               color: Colors.white,
             ),
             TextButton(
-              onPressed: () => events_hub.onEditLabels(context,contact.labels),
+              onPressed: () => events_hub.onEditLabels(context,[],saveChanges: true),
               child: ListTile(
                   subtitleTextStyle: TextStyle(color: Colors.white),
                   title: Text("Etiquetas",
