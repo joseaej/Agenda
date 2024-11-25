@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Contact extends ChangeNotifier {
-  final int id;
+class ContactData extends ChangeNotifier {
+  final int? id;
   String? name;
   String? surname;
   String? email;
@@ -12,8 +12,8 @@ class Contact extends ChangeNotifier {
   bool isFavorite;
   List<String> labels;
 
-  Contact.vacio({
-    required this.id,
+  ContactData({
+    this.id,
     this.name,
     this.surname,
     this.email,
@@ -25,7 +25,9 @@ class Contact extends ChangeNotifier {
     this.labels = const [],
   })  : creation = creation ?? DateTime.now(),
         modification = modification ?? DateTime.now();
-  Contact({
+
+
+    ContactData.vacio({
     required this.id,
     this.name,
     this.surname,
@@ -39,8 +41,8 @@ class Contact extends ChangeNotifier {
   })  : creation = creation ?? DateTime.now(),
         modification = modification ?? DateTime.now();
 
-  factory Contact.fromJson(Map<String, dynamic> json) {
-    return Contact(
+  factory ContactData.fromJson(Map<String, dynamic> json) {
+    return ContactData(
       id: json['id'],
       name: json['name'],
       surname: json['surname'],
@@ -74,7 +76,7 @@ class Contact extends ChangeNotifier {
     return result.join('\n');
   }
 
-  Contact copyWith({
+  ContactData copyWith({
     int? id,
     String? name,
     String? surname,
@@ -86,7 +88,7 @@ class Contact extends ChangeNotifier {
     bool? isFavorite,
     List<String>? labels,
   }) {
-    return Contact(
+    return ContactData(
       id: id ?? this.id,
       name: name ?? this.name,
       surname: surname ?? this.surname,
@@ -117,7 +119,7 @@ class Contact extends ChangeNotifier {
     return data;
   }
 
-  void copyValuesFrom(Contact other) {
+  void copyValuesFrom(ContactData other) {
     name = other.name ?? name;
     surname = other.surname ?? surname;
     email = other.email ?? email;
