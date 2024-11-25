@@ -1,6 +1,4 @@
-import 'package:agenda/datas/messages.dart';
 import 'package:agenda/models/agenda_data.dart';
-import 'package:agenda/models/contact.provider.dart';
 import 'package:agenda/models/contactdata.dart';
 import 'package:agenda/pages/contactFormPage.dart';
 import 'package:flutter/material.dart';
@@ -39,12 +37,12 @@ class EventsHub extends ChangeNotifier {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(error)));
     } finally{
-      agenda.save();
+      Provider.of<AgendaData>(context, listen: false).save();
     }
   }
   onCreateContact(BuildContext context){
-    ContactData contact = ContactData.vacio(id: agenda.contacts.length+1);
-    agenda.save;
+    ContactData contact = ContactData.vacio(id: Provider.of<AgendaData>(context, listen: false).contacts.length+1);
+    Provider.of<AgendaData>(context, listen: false).save;
     onEditContact(context, contact,isNew: true);
   }
   onDeleteContact(BuildContext context, ContactData contact)async{
@@ -65,7 +63,7 @@ class EventsHub extends ChangeNotifier {
             onPressed: () {
               Provider.of<AgendaData>(context, listen: false).contacts.remove(contact);
               Provider.of<AgendaData>(context, listen: false).notificar();
-              agenda.save();
+              Provider.of<AgendaData>(context, listen: false).save();
               Navigator.of(context).pop(); 
             },
             child: const Text('Si',style: TextStyle(color: Colors.white)),
@@ -168,7 +166,7 @@ class EventsHub extends ChangeNotifier {
 
       contactProvider.notifyListeners();
       notifyListeners();
-      agenda.save();
+      Provider.of<AgendaData>(context, listen: false).save();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(isSorted
