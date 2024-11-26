@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+
 import 'package:agenda/models/agenda_data.dart';
 import 'package:agenda/models/contactdata.dart';
 import 'package:agenda/models/events_hub.dart';
@@ -222,20 +223,9 @@ class _ContactPageState extends State<ContactPage> {
         title: Text("Agenda", style: TextStyle(color: Colors.white)),
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
-          Consumer<EventsHub>(
-            builder: (context, eventsHub, child) {
-              return IconButton(
-                icon: Icon(
-                  eventsHub.isSorted
-                      ? FontAwesomeIcons.arrowDownAZ
-                      : FontAwesomeIcons.arrowDownZA,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  eventsHub.onSort(context);
-                },
-              );
-            },
+          IconButton(
+            onPressed: () => events_hub.onSort(context),
+            icon: iconoord,
           ),
           IconButton(
             onPressed: onFilterPresed,
@@ -243,6 +233,24 @@ class _ContactPageState extends State<ContactPage> {
           ),
         ],
       );
+
+  void onShortPresed() {
+    setState(() {
+      if (abcshort) {
+        iconoord = Icon(FontAwesomeIcons.arrowDownAZ);
+        abcshort = false;
+        Provider.of<AgendaData>(context, listen: false)
+            .contacts
+            .sort((a, b) => a.name!.compareTo(b.name!));
+      } else {
+        iconoord = Icon(FontAwesomeIcons.arrowDownZA);
+        abcshort = true;
+        Provider.of<AgendaData>(context, listen: false)
+            .contacts
+            .sort((a, b) => b.name!.compareTo(a.name!));
+      }
+    });
+  }
 
   void onFilterPresed() {}
 }

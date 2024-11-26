@@ -2,14 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'contactdata.dart';
 
-enum AgendaStatus { Initial, Loading, Ready, Error }
 class AgendaData extends ChangeNotifier {
-  
   List<ContactData> contacts;
-  AgendaStatus _status = AgendaStatus.Initial;
-  AgendaStatus get status => _status;
 
   AgendaData({List<ContactData>? contacts}) : contacts = contacts ?? [];
 
@@ -22,10 +19,7 @@ class AgendaData extends ChangeNotifier {
 
     return AgendaData(contacts: contactList);
   }
-  void _setStatus(AgendaStatus newStatus) {
-    _status = newStatus;
-    notifyListeners();
-  }
+
   Map<String, dynamic> toJson() {
     return {
       'contacts': contacts.map((contact) => contact.toJson()).toList(),
@@ -45,42 +39,21 @@ class AgendaData extends ChangeNotifier {
   void notificar() {
     notifyListeners();
   }
-    Future<void> save() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-
-      final agendaJson = jsonEncode(toJson());
-
-      await prefs.setString('agenda_data', agendaJson);
-    } catch (e) {
-      debugPrint('Error guardando la agenda: $e');
-    }
+  Future<void> save() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String jsonData = jsonEncode(toJson()); 
+    await prefs.setString('agenda_data', jsonData); 
   }
 
   Future<void> load() async {
-    _setStatus(AgendaStatus.Loading);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonData = prefs.getString('agenda_data'); 
 
-    try {
-      await Future.delayed(const Duration(seconds: 2)); 
-
-      final prefs = await SharedPreferences.getInstance();
-
-      final agendaJson = prefs.getString('agenda_data');
-
-      if (agendaJson != null) {
-        final decodedJson = jsonDecode(agendaJson);
-        final loadedAgenda = AgendaData.fromJson(decodedJson);
-
-        contacts = loadedAgenda.contacts;
-
-        _setStatus(AgendaStatus.Ready);
-      } else {
-        _setStatus(AgendaStatus.Initial);
-      }
-    } catch (e) {
-      _setStatus(AgendaStatus.Error);
-      debugPrint('Error cargando la agenda: $e');
+    if (jsonData != null) {
+      Map<String, dynamic> jsonMap = jsonDecode(jsonData); 
+      var loadedData = AgendaData.fromJson(jsonMap); 
+      contacts = loadedData.contacts; 
+      notifyListeners(); 
     }
   }
 }
-
