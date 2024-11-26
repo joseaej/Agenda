@@ -1,29 +1,26 @@
-import 'package:agenda/models/agenda_data.dart';
+import 'package:agenda/datas/messages.dart';
 import 'package:agenda/models/contact.provider.dart';
 import 'package:agenda/models/contactdata.dart';
 import 'package:agenda/models/events_hub.dart';
-import 'package:agenda/pages/loadingPage.dart';
+import 'package:agenda/pages/contactsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
-
-  runApp(MyApp());
+void main() {
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-      final agenda = AgendaData();
-    agenda.save;
-    agenda.load();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: agenda),
-        ChangeNotifierProvider(create: (_)=> EventsHub()),
+        ChangeNotifierProvider(create: (_)=> ContactProvider()),
         ChangeNotifierProvider(create: (_)=> ContactData()),
-        ChangeNotifierProvider(create: (_)=> ContactProvider())
+        ChangeNotifierProvider(create: (_)=> EventsHub())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -34,7 +31,7 @@ class MyApp extends StatelessWidget {
           ),
           useMaterial3: true,
         ),
-        home:  Loadingpage(),
+        home: const ContactPage(),
       ),
     );
   }
