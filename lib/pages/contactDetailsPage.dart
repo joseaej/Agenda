@@ -175,7 +175,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                         ),
                         SizedBox(height: 5),
                         Text(
-                          (DateTime.now().year - contact.birthdate!.year)
+                          (DateTime.now().year - ((contact.birthdate!=null)?contact.birthdate!.year:DateTime.now().year))
                               .toString(),
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ),

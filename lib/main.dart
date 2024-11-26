@@ -9,10 +9,14 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+<<<<<<< HEAD
   final AgendaData agenda = AgendaData();
   await agenda.load();
 
   runApp(MyApp(agenda: agenda));
+=======
+  runApp(const MyApp());
+>>>>>>> f2ace6ef491eba08cdbe049eb57e71457d4b7915
 }
 
 class MyApp extends StatelessWidget {
@@ -38,7 +42,11 @@ class MyApp extends StatelessWidget {
           ),
           useMaterial3: true,
         ),
+<<<<<<< HEAD
         home: const ContactPage(),
+=======
+        home:  const Loadingpage(),
+>>>>>>> f2ace6ef491eba08cdbe049eb57e71457d4b7915
       ),
     );
   }
