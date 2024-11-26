@@ -1,81 +1,101 @@
-import 'package:agenda/datas/messages.dart';
 import 'package:agenda/models/agenda_data.dart';
-import 'package:agenda/models/contact.provider.dart';
 import 'package:agenda/models/contactdata.dart';
 import 'package:agenda/pages/contactFormPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EventsHub extends ChangeNotifier {
-  String error="";
-  bool isError=false;
-  onEditContact(BuildContext context, ContactData contact, {bool isNew = false}) async{
+  String error = "";
+  bool isError = false;
+
+  Future<void> onEditContact(BuildContext context, ContactData contact,
+      {bool isNew = false}) async {
     try {
       ContactData newContact = contact.copyWith();
-      final result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => ContactFormPage(contacto: newContact)));
+      final result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ContactFormPage(contacto: newContact),
+      ));
       if (result != null) {
         contact.copyValuesFrom(newContact);
         contact.modification = DateTime.now();
-        Provider.of<AgendaData>(context, listen: false).notificar();
-        if (isNew==false) {
-          ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Contacto editado con exito")));
-        }else{
-          Provider.of<AgendaData>(context, listen: false).contacts.add(newContact);
-          Provider.of<AgendaData>(context, listen: false).notificar();
-          ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Contacto creado con exito")));
+
+        final agendaData = Provider.of<AgendaData>(context, listen: false);
+        if (isNew) {
+          agendaData.contacts.add(newContact);
         }
-      }else{
-        isError = true;
-        error = "Error en la modificacion del contacto";
+        await agendaData.save();
+        agendaData.notificar();
+
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error)));
+          SnackBar(
+              content: Text(isNew
+                  ? "Contacto creado con éxito"
+                  : "Contacto editado con éxito")),
+        );
+      } else {
+        isError = true;
+        error = "Error en la modificación del contacto";
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error)),
+        );
       }
     } catch (e) {
       isError = true;
       error = "Ocurrió un error: $e";
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error)));
+        SnackBar(content: Text(error)),
+      );
     }
   }
-  onCreateContact(BuildContext context){
-    ContactData contact = ContactData.vacio(id: agenda.contacts.length+1);
-    onEditContact(context, contact,isNew: true);
+
+  void onCreateContact(BuildContext context) {
+    final agendaData = Provider.of<AgendaData>(context, listen: false);
+    ContactData contact = ContactData.vacio(id: agendaData.contacts.length + 1);
+    onEditContact(context, contact, isNew: true);
   }
-  onDeleteContact(BuildContext context, ContactData contact)async{
+
+  Future<void> onDeleteContact(
+      BuildContext context, ContactData contact) async {
+    final agendaData = Provider.of<AgendaData>(context, listen: false);
     await showDialog<String>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           actionsAlignment: MainAxisAlignment.center,
           actionsOverflowAlignment: OverflowBarAlignment.center,
-          backgroundColor: Color.fromARGB(255, 33, 31, 31),
-          content: const Text("¿Realmente quires borrar el contacto?",style: TextStyle(color: Colors.white)),
+          backgroundColor: const Color.fromARGB(255, 33, 31, 31),
+          content: const Text(
+            "¿Realmente quieres borrar el contacto?",
+            style: TextStyle(color: Colors.white),
+          ),
           actions: [
             TextButton(
-            onPressed: () { Navigator.of(context).pop(); },
-            child: Text('No',style: TextStyle(color: Colors.white)),
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('No', style: TextStyle(color: Colors.white)),
             ),
             TextButton(
-            onPressed: () {
-              Provider.of<AgendaData>(context, listen: false).contacts.remove(contact);
-              Provider.of<AgendaData>(context, listen: false).notificar();
-              Navigator.of(context).pop(); 
-            },
-            child: Text('Si',style: TextStyle(color: Colors.white)),
+              onPressed: () async {
+                agendaData.contacts.remove(contact);
+                await agendaData.save();
+                agendaData.notificar();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Sí', style: TextStyle(color: Colors.white)),
             ),
           ],
-       );
+        );
       },
     );
   }
-  onEditLabels(BuildContext context, List<String> labels, {bool saveChanges = false}) {
+
+  void onEditLabels(BuildContext context, List<String> labels,
+      {bool saveChanges = false}) {
     String initialLabels = labels
         .map((label) => label[0].toUpperCase() + label.substring(1))
         .join(", ");
 
-    final TextEditingController labelController = TextEditingController(text: initialLabels);
+    final TextEditingController labelController =
+        TextEditingController(text: initialLabels);
 
     showModalBottomSheet(
       backgroundColor: const Color.fromARGB(255, 41, 40, 40),
@@ -111,18 +131,24 @@ class EventsHub extends ChangeNotifier {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   String inputText = labelController.text;
                   List<String> updatedLabels = inputText
                       .split(",")
                       .where((label) => label.isNotEmpty)
-                      .map((label) => label[0].toUpperCase() + label.substring(1).trim())
+                      .map((label) =>
+                          label[0].toUpperCase() + label.substring(1).trim())
                       .toList();
 
                   if (saveChanges) {
-                    final contact = Provider.of<ContactData>(context, listen: false);
+                    final contact =
+                        Provider.of<ContactData>(context, listen: false);
                     contact.labels = updatedLabels;
                     contact.notificar();
+
+                    final agendaData =
+                        Provider.of<AgendaData>(context, listen: false);
+                    await agendaData.save();
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -146,24 +172,16 @@ class EventsHub extends ChangeNotifier {
       },
     );
   }
-onSort(BuildContext context) {
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    var contactProvider = Provider.of<ContactProvider>(context, listen: false);
 
-    contactProvider.contacts.sort((a, b) => a.name!.compareTo(b.name!));
+  Future<void> onSort(BuildContext context) async {
+    final agendaData = Provider.of<AgendaData>(context, listen: false);
 
-    contactProvider.notifyListeners();
+    agendaData.contacts.sort((a, b) => a.name!.compareTo(b.name!));
+    await agendaData.save();
+    agendaData.notificar();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Contactos ordenados por nombre"),
-      ),
+      const SnackBar(content: Text("Contactos ordenados por nombre")),
     );
-  });
-}
-
-
-
-
-
+  }
 }

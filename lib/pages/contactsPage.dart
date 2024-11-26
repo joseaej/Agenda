@@ -224,7 +224,7 @@ class _ContactPageState extends State<ContactPage> {
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
           IconButton(
-            onPressed: events_hub.onSort(context),
+            onPressed: () => events_hub.onSort(context),
             icon: iconoord,
           ),
           IconButton(
