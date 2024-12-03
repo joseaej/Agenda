@@ -1,28 +1,42 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:agenda/models/agenda_data.dart';
+import 'package:agenda/models/auth_service/firebase_auth.dart';
 import 'package:agenda/models/contact.provider.dart';
 import 'package:agenda/models/contactdata.dart';
 import 'package:agenda/models/events_hub.dart';
 import 'package:agenda/pages/contactsPage.dart';
+import 'package:agenda/pages/login_page/loginPage.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-<<<<<<< HEAD
-  final AgendaData agenda = AgendaData();
-  await agenda.load();
+  await Firebase.initializeApp();
 
-  runApp(MyApp(agenda: agenda));
-=======
-  runApp(const MyApp());
->>>>>>> f2ace6ef491eba08cdbe049eb57e71457d4b7915
+  AgendaData agenda = AgendaData();
+  String? initialRoute = "/login";
+
+  try {
+    await agenda.load();
+    final uid = await checkUser();
+    if (uid != null) {
+      initialRoute = "/home";
+    }
+  } catch (e) {
+    debugPrint('Error durante la inicialización: $e');
+  }
+
+  runApp(MyApp(agenda: agenda, route: initialRoute));
 }
 
 class MyApp extends StatelessWidget {
   final AgendaData agenda;
+  final String? route;
 
-  const MyApp({super.key, required this.agenda});
+  const MyApp({super.key, required this.agenda, required this.route});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +45,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: agenda),
         ChangeNotifierProvider(create: (_) => ContactProvider()),
         ChangeNotifierProvider(create: (_) => ContactData()),
-        ChangeNotifierProvider(create: (_) => EventsHub())
+        ChangeNotifierProvider(create: (_) => EventsHub()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -42,11 +56,11 @@ class MyApp extends StatelessWidget {
           ),
           useMaterial3: true,
         ),
-<<<<<<< HEAD
-        home: const ContactPage(),
-=======
-        home:  const Loadingpage(),
->>>>>>> f2ace6ef491eba08cdbe049eb57e71457d4b7915
+        initialRoute: route,
+        routes: {
+          "/login": (context) => LoginScreen(),
+          "/home": (context) => ContactPage(),
+        },
       ),
     );
   }
